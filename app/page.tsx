@@ -21,18 +21,6 @@ export default function Home() {
           Explore Bachelor, Master, and Certificate programs. Submit your application in minutes with dynamic, program-specific forms.
         </p>
 
-        {/* DB badges */}
-        <div className="flex items-center gap-3 mb-10">
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-ibm-text-muted bg-ibm-card border border-ibm-border px-3 py-1.5">
-            <span className="w-2 h-2 rounded-full bg-ibm-blue inline-block" />
-            PostgreSQL
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-ibm-text-muted bg-ibm-card border border-ibm-border px-3 py-1.5">
-            <span className="w-2 h-2 rounded-full bg-ibm-success inline-block" />
-            MongoDB
-          </span>
-        </div>
-
         <Link
           href="/programs"
           className="inline-flex items-center gap-2 bg-ibm-blue hover:bg-ibm-blue-hover text-ibm-text-inverse text-sm font-semibold px-6 py-3 transition-colors"
