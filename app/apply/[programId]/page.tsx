@@ -9,6 +9,12 @@ interface Props {
   params: Promise<{ programId: string }>
 }
 
+const TYPE_COLORS: Record<string, { bg: string; text: string }> = {
+  BACHELOR:    { bg: 'bg-tag-bachelor', text: 'text-ibm-text-inverse' },
+  MASTER:      { bg: 'bg-tag-master',   text: 'text-ibm-text-inverse' },
+  CERTIFICATE: { bg: 'bg-tag-cert',     text: 'text-ibm-text-inverse' },
+}
+
 export default async function ApplyPage({ params }: Props) {
   const { programId } = await params
 
@@ -18,42 +24,61 @@ export default async function ApplyPage({ params }: Props) {
   await connectToMongoDB()
   const formDoc = await DynamicFormModel.findOne({ programId }).lean()
 
-  const typeColors: Record<string, string> = {
-    BACHELOR: 'bg-blue-100 text-blue-800',
-    MASTER: 'bg-purple-100 text-purple-800',
-    CERTIFICATE: 'bg-emerald-100 text-emerald-800',
-  }
+  const tagColor = TYPE_COLORS[program.type] ?? { bg: 'bg-ibm-overlay', text: 'text-ibm-text-primary' }
 
   return (
-    <main className="min-h-screen py-12 px-4">
-      <div className="max-w-2xl mx-auto">
-        <Link
-          href="/programs"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-indigo-600 mb-6 transition-colors"
-        >
-          ← Back to Programs
-        </Link>
+    <main className="min-h-screen bg-ibm-canvas">
 
-        <div className="mb-6">
-          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${typeColors[program.type] ?? 'bg-gray-100 text-gray-700'}`}>
-            {program.type}
-          </span>
-          <h1 className="text-3xl font-bold text-gray-900 mt-3">{program.name}</h1>
-          <p className="text-gray-500 mt-1">{program.university}</p>
-          <p className="text-sm text-gray-600 mt-3">{program.description}</p>
+      {/* ── Page header ── */}
+      <div className="bg-ibm-nav text-ibm-text-inverse px-6 py-10">
+        <div className="max-w-4xl mx-auto">
+          <Link
+            href="/programs"
+            className="inline-flex items-center gap-1 text-xs text-ibm-text-muted hover:text-ibm-text-inverse mb-4 transition-colors"
+          >
+            ← Programs
+          </Link>
+          <div className="flex items-center gap-3 mb-2">
+            <span className={`text-xs font-semibold px-2.5 py-1 ${tagColor.bg} ${tagColor.text}`}>
+              {program.type}
+            </span>
+          </div>
+          <h1 className="text-3xl font-light">{program.name}</h1>
+          <p className="text-ibm-text-muted text-sm mt-1">{program.university}</p>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {/* ── Program info sidebar ── */}
+        <aside className="lg:col-span-1">
+          <div className="bg-ibm-card border border-ibm-border p-5">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-ibm-text-muted mb-3">
+              About this program
+            </h3>
+            <p className="text-sm text-ibm-text-secondary leading-relaxed">
+              {program.description}
+            </p>
+          </div>
+        </aside>
+
+        {/* ── Application form ── */}
+        <div className="lg:col-span-2">
+          <div className="bg-ibm-card border border-ibm-border p-6">
+            <h2 className="text-base font-semibold text-ibm-text-primary mb-6 pb-3 border-b border-ibm-border">
+              Application Form
+            </h2>
+
+            {formDoc ? (
+              <DynamicFormComponent programId={program.id} fields={formDoc.fields} />
+            ) : (
+              <div className="py-10 text-center text-ibm-text-muted text-sm">
+                No application form configured for this program yet.
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">Application Form</h2>
-
-          {formDoc ? (
-            <DynamicFormComponent programId={program.id} fields={formDoc.fields} />
-          ) : (
-            <div className="text-center py-8 text-gray-400">
-              <p>No application form has been configured for this program yet.</p>
-            </div>
-          )}
-        </div>
       </div>
     </main>
   )

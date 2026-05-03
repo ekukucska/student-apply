@@ -14,20 +14,31 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="min-h-screen bg-gray-50 antialiased">
-        <nav className="bg-white border-b border-gray-200 sticky top-0 z-10">
-          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-            <Link href="/" className="text-xl font-bold text-indigo-600 tracking-tight">
+      <body className="min-h-screen bg-ibm-canvas antialiased">
+
+        {/* ── Top navigation — IBM Carbon dark shell ── */}
+        <header className="bg-ibm-nav sticky top-0 z-20">
+          <div className="max-w-7xl mx-auto px-6 h-12 flex items-center justify-between">
+            <Link
+              href="/"
+              className="text-ibm-text-inverse text-sm font-semibold tracking-wide hover:text-ibm-blue transition-colors"
+            >
               StudentApply
             </Link>
-            <div className="flex items-center gap-6 text-sm font-medium text-gray-600">
-              <Link href="/programs" className="hover:text-indigo-600 transition-colors">
+
+            <nav className="flex items-center gap-1">
+              <Link
+                href="/programs"
+                className="text-xs font-medium text-ibm-text-muted hover:text-ibm-text-inverse hover:bg-ibm-nav-hover px-3 py-2 transition-colors"
+              >
                 Programs
               </Link>
-            </div>
+            </nav>
           </div>
-        </nav>
+        </header>
+
         {children}
+
       </body>
     </html>
   )
