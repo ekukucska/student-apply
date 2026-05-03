@@ -70,40 +70,46 @@ async function main() {
     },
   })
 
-  const programData: { name: string; type: ProgramType; university: string; description: string }[] = [
+  const programData: { name: string; type: ProgramType; studyField: string; university: string; description: string }[] = [
     {
       name: 'Computer Science',
       type: 'BACHELOR',
+      studyField: 'Computer Science',
       university: 'University of Technology',
       description: 'A comprehensive 4-year program covering algorithms, data structures, systems design, and software engineering principles.',
     },
     {
       name: 'Data Science & AI',
       type: 'MASTER',
+      studyField: 'Data Science & AI',
       university: 'Institute of Advanced Studies',
       description: 'Advanced 2-year program in machine learning, statistical analysis, NLP, and applied AI for real-world problems.',
     },
     {
       name: 'Full-Stack Web Development',
       type: 'CERTIFICATE',
+      studyField: 'Software Development',
       university: 'Digital Skills Academy',
       description: 'Professional certificate covering React, Node.js, databases, and cloud deployment — completed in 6 months.',
     },
     {
       name: 'Cybersecurity',
       type: 'MASTER',
+      studyField: 'Cybersecurity',
       university: 'National Security University',
       description: 'Specialised master program in network security, ethical hacking, incident response, and digital forensics.',
     },
     {
       name: 'Business Administration',
       type: 'BACHELOR',
+      studyField: 'Business & Management',
       university: 'European Business School',
       description: '3-year program covering management, corporate finance, marketing strategy, and entrepreneurship.',
     },
     {
       name: 'Cloud Architecture',
       type: 'CERTIFICATE',
+      studyField: 'Cloud & DevOps',
       university: 'Cloud Computing Institute',
       description: 'Professional certificate for AWS, Azure, and GCP — covering infrastructure design, DevOps, and cost optimisation.',
     },

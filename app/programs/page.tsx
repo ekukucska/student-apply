@@ -1,20 +1,12 @@
 import { prisma } from '@/lib/prisma'
-import ProgramCard from '@/components/ProgramCard'
+import ProgramsFilter from '@/components/ProgramsFilter'
 
 export const dynamic = 'force-dynamic'
 
-const TYPE_LABELS: Record<string, string> = {
-  BACHELOR: 'Bachelor',
-  MASTER: 'Master',
-  CERTIFICATE: 'Certificate',
-}
-
 export default async function ProgramsPage() {
   const programs = await prisma.program.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { name: 'asc' },
   })
-
-  const types = ['BACHELOR', 'MASTER', 'CERTIFICATE'] as const
 
   return (
     <main className="min-h-screen bg-ibm-canvas">
@@ -33,7 +25,6 @@ export default async function ProgramsPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-
         {programs.length === 0 ? (
           <div className="bg-ibm-card border border-ibm-border p-12 text-center">
             <p className="text-ibm-text-secondary font-medium">No programs found.</p>
@@ -42,32 +33,10 @@ export default async function ProgramsPage() {
             </p>
           </div>
         ) : (
-          <>
-            {/* ── Type group sections ── */}
-            {types.map(type => {
-              const group = programs.filter(p => p.type === type)
-              if (group.length === 0) return null
-              return (
-                <section key={type} className="mb-10">
-                  <div className="flex items-center gap-3 mb-4 border-b border-ibm-border pb-3">
-                    <h2 className="text-sm font-semibold text-ibm-text-primary tracking-wide uppercase">
-                      {TYPE_LABELS[type]}
-                    </h2>
-                    <span className="text-xs text-ibm-text-muted bg-ibm-overlay px-2 py-0.5">
-                      {group.length}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {group.map(program => (
-                      <ProgramCard key={program.id} program={program} />
-                    ))}
-                  </div>
-                </section>
-              )
-            })}
-          </>
+          <ProgramsFilter programs={programs} />
         )}
       </div>
+
     </main>
   )
 }
