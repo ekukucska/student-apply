@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ─── IBM Carbon-inspired design tokens ─────────────────────────────────────
+   All colors are defined here once. Tailwind v4 @theme turns every
+   --color-* entry into bg-*, text-*, border-*, ring-* utility classes.
+   ─────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* Brand */
+  --color-ibm-blue:        #0f62fe;   /* Carbon Blue-60  — primary actions    */
+  --color-ibm-blue-hover:  #0043ce;   /* Carbon Blue-70  — hover state        */
+  --color-ibm-blue-active: #002d9c;   /* Carbon Blue-80  — pressed state      */
+  --color-ibm-blue-light:  #edf5ff;   /* Carbon Blue-10  — subtle tint        */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Surfaces */
+  --color-ibm-canvas:  #f4f4f4;   /* Carbon Gray-10  — page background    */
+  --color-ibm-card:    #ffffff;   /* White           — card surface        */
+  --color-ibm-overlay: #e0e0e0;   /* Carbon Gray-20  — hover surface      */
+
+  /* Navigation */
+  --color-ibm-nav:         #161616;   /* Carbon Gray-100 — top nav bg         */
+  --color-ibm-nav-hover:   #262626;   /* Carbon Gray-90  — nav item hover     */
+
+  /* Borders */
+  --color-ibm-border:       #e0e0e0;   /* Carbon Gray-20  — default border     */
+  --color-ibm-border-strong:#8d8d8d;   /* Carbon Gray-50  — input/focus border */
+
+  /* Typography */
+  --color-ibm-text-primary:   #161616;   /* Carbon Gray-100 */
+  --color-ibm-text-secondary: #525252;   /* Carbon Gray-70  */
+  --color-ibm-text-muted:     #8d8d8d;   /* Carbon Gray-50  */
+  --color-ibm-text-inverse:   #ffffff;   /* On dark surfaces */
+  --color-ibm-text-link:      #0f62fe;   /* Same as brand    */
+
+  /* Program-type tags */
+  --color-tag-bachelor:   #007d79;   /* Carbon Teal-50   */
+  --color-tag-master:     #8a3ffc;   /* Carbon Purple-60 */
+  --color-tag-cert:       #0072c3;   /* Carbon Cyan-60   */
+
+  /* Status */
+  --color-ibm-success: #24a148;   /* Carbon Green-50 */
+  --color-ibm-error:   #da1e28;   /* Carbon Red-60   */
+  --color-ibm-warning: #f1c21b;   /* Carbon Yellow-20 */
+
+  /* Fonts (pass through Next.js CSS vars) */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ─── Base reset ─────────────────────────────────────────────────────────── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f4f4f4;
+  color: #161616;
+  font-family: var(--font-sans), 'IBM Plex Sans', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
