@@ -38,7 +38,8 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     )
-  } catch {
+  } catch (err) {
+    console.error('[POST /api/applications]', err)
     return NextResponse.json({ error: 'Failed to submit application' }, { status: 500 })
   }
 }

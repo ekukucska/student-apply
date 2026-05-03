@@ -106,6 +106,8 @@ export default function DynamicForm({
               fieldName={field.name}
               label={field.label}
               required={field.required}
+              userId={userId}
+              programId={programId}
               onUpload={handleFileUpload}
             />
           )

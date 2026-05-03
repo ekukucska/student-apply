@@ -38,6 +38,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# uploaded files — keep folder, ignore contents
+/public/uploads/*
+!/public/uploads/.gitkeep
+
 
 # ignore markdown files except the root README
 *.md

@@ -21,6 +21,9 @@ export default async function ApplyPage({ params }: Props) {
   const program = await prisma.program.findUnique({ where: { id: programId } })
   if (!program) notFound()
 
+  // Fetch demo user — provides a real FK-valid userId until auth is added
+  const demoUser = await prisma.user.findFirst({ where: { email: 'student@example.com' } })
+
   await connectToMongoDB()
   const formDoc = await DynamicFormModel.findOne({ programId }).lean()
 
@@ -70,7 +73,11 @@ export default async function ApplyPage({ params }: Props) {
             </h2>
 
             {formDoc ? (
-              <DynamicFormComponent programId={program.id} fields={formDoc.fields} />
+              <DynamicFormComponent
+                programId={program.id}
+                fields={formDoc.fields}
+                userId={demoUser?.id}
+              />
             ) : (
               <div className="py-10 text-center text-ibm-text-muted text-sm">
                 No application form configured for this program yet.
