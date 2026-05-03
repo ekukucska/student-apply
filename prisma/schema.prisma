@@ -36,6 +36,7 @@ model Program {
   id          String      @id @default(cuid())
   name        String
   type        ProgramType
+  studyField  String      @default("")
   university  String
   description String
   createdAt   DateTime    @default(now())
