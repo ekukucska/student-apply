@@ -33,6 +33,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               >
                 Programs
               </Link>
+              <Link
+                href="/dashboard"
+                className="text-xs font-medium text-ibm-text-muted hover:text-ibm-text-inverse hover:bg-ibm-nav-hover px-3 py-2 transition-colors"
+              >
+                Dashboard
+              </Link>
             </nav>
           </div>
         </header>
