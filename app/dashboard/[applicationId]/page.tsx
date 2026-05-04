@@ -139,7 +139,7 @@ export default async function ApplicationDetailPage({ params }: Props) {
                   <button
                     type="submit"
                     disabled={currentStatus === status}
-                    className={`text-xs font-semibold px-3 py-1.5 transition-opacity disabled:opacity-40 disabled:cursor-default ${cfg.btn}`}
+                    className={`text-xs font-semibold px-3 py-1.5 transition-opacity disabled:opacity-40 disabled:cursor-default cursor-pointer ${cfg.btn}`}
                   >
                     {cfg.label}
                   </button>
