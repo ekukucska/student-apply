@@ -5,6 +5,8 @@ import { prisma } from '@/lib/prisma'
 import { connectToMongoDB } from '@/lib/mongoose'
 import { SubmissionData } from '@/models/SubmissionData'
 import { DynamicForm } from '@/models/DynamicForm'
+import { ApplicationComment } from '@/models/ApplicationComment'
+import AddCommentForm from '@/components/AddCommentForm'
 
 export const dynamic = 'force-dynamic'
 
@@ -38,9 +40,10 @@ export default async function ApplicationDetailPage({ params }: Props) {
   if (!application) notFound()
 
   await connectToMongoDB()
-  const [submission, formSchema] = await Promise.all([
+  const [submission, formSchema, comments] = await Promise.all([
     SubmissionData.findOne({ applicationStatusId: applicationId }).lean(),
     DynamicForm.findOne({ programId: application.programId }).lean(),
+    ApplicationComment.find({ applicationStatusId: applicationId }).sort({ createdAt: 1 }).lean(),
   ])
 
   const fieldMeta: { name: string; label: string; type: string }[] =
@@ -248,6 +251,49 @@ export default async function ApplicationDetailPage({ params }: Props) {
               ))}
             </div>
           )}
+        </div>
+
+        {/* ── Reviewer comments ── */}
+        <div id="comments" className="bg-ibm-card border border-ibm-border">
+          <div className="px-5 py-4 border-b border-ibm-border flex items-center gap-2">
+            <svg className="w-4 h-4 text-ibm-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.852L3 20l1.02-3.533C3.372 15.228 3 13.656 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            <h2 className="text-sm font-semibold text-ibm-text-primary uppercase tracking-wider">
+              Reviewer Comments
+            </h2>
+            {comments.length > 0 && (
+              <span className="ml-auto text-xs text-ibm-text-muted">
+                {comments.length} comment{comments.length !== 1 ? 's' : ''}
+              </span>
+            )}
+          </div>
+
+          {comments.length === 0 ? (
+            <p className="px-5 py-6 text-sm text-ibm-text-muted text-center">No comments yet.</p>
+          ) : (
+            <div className="divide-y divide-ibm-border">
+              {comments.map(c => (
+                <div key={String(c._id)} className="px-5 py-4">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="text-sm font-semibold text-ibm-text-primary">{c.reviewerName}</span>
+                    <span className="text-xs text-ibm-text-muted">
+                      {new Date(c.createdAt).toLocaleDateString('en-GB', {
+                        day: '2-digit', month: 'short', year: 'numeric',
+                      })}{' '}
+                      {new Date(c.createdAt).toLocaleTimeString('en-GB', {
+                        hour: '2-digit', minute: '2-digit',
+                      })}
+                    </span>
+                  </div>
+                  <p className="text-sm text-ibm-text-secondary whitespace-pre-wrap">{c.body}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <AddCommentForm applicationId={applicationId} />
         </div>
 
       </div>

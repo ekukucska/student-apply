@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
+import { connectToMongoDB } from '@/lib/mongoose'
+import { ApplicationComment } from '@/models/ApplicationComment'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,6 +28,12 @@ export default async function DashboardPage() {
   const counts = Object.fromEntries(
     Object.keys(STATUS_CFG).map(s => [s, applications.filter(a => a.status === s).length])
   )
+
+  await connectToMongoDB()
+  const commentCounts: { _id: string; count: number }[] = await ApplicationComment.aggregate([
+    { $group: { _id: '$applicationStatusId', count: { $sum: 1 } } },
+  ])
+  const commentCountMap = new Map(commentCounts.map(c => [c._id, c.count]))
 
   return (
     <main className="min-h-screen bg-ibm-canvas">
@@ -67,10 +75,10 @@ export default async function DashboardPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b-2 border-ibm-border bg-ibm-canvas">
-                  {['Applicant', 'Program', 'Type', 'Status', 'Last Updated', 'Actions'].map((h, i) => (
+                  {['Applicant', 'Program', 'Type', 'Status', 'Last Updated', '', 'Actions'].map((h, i) => (
                     <th
-                      key={h}
-                      className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider text-ibm-text-muted ${i === 5 ? 'text-right' : 'text-left'}`}
+                      key={i}
+                      className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider text-ibm-text-muted ${i === 6 ? 'text-right' : 'text-left'}`}
                     >
                       {h}
                     </th>
@@ -105,6 +113,21 @@ export default async function DashboardPage() {
                         {new Date(app.updatedAt).toLocaleDateString('en-GB', {
                           day: '2-digit', month: 'short', year: 'numeric',
                         })}
+                      </td>
+                      <td className="px-4 py-3">
+                        {commentCountMap.has(app.id) && (
+                          <Link
+                            href={`/dashboard/${app.id}#comments`}
+                            title={`${commentCountMap.get(app.id)} comment${commentCountMap.get(app.id) !== 1 ? 's' : ''}`}
+                            className="inline-flex items-center gap-1 text-ibm-text-muted hover:text-ibm-blue transition-colors"
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                                d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.77 9.77 0 01-4-.852L3 20l1.02-3.533C3.372 15.228 3 13.656 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                            </svg>
+                            <span className="text-xs font-semibold">{commentCountMap.get(app.id)}</span>
+                          </Link>
+                        )}
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-end gap-12">
